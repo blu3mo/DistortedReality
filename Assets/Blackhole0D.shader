@@ -35,7 +35,7 @@ Shader "Custom/Blackhole0D" {
             // Normalize the direction and apply distortion based on inverse square of distance
             float3 direction = normalize(toBlackhole);
             float distortion;
-            if (distance > 0) {
+            if (distance != 0) {
                 distortion = _BlackholeStrength / (distance);
                 distortion = max(distortion, 0); // Avoid negative distortion
             } else {
@@ -61,6 +61,7 @@ Shader "Custom/Blackhole0D" {
         }
         ENDCG
     }
+    
 
     FallBack "Diffuse"
 }
