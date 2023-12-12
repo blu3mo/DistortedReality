@@ -1,10 +1,9 @@
-Shader "Custom/BlackholeShader" {
+Shader "Custom/Blackhole0D" {
     Properties {
         _Color("Color", Color) = (1,1,1,1)
         _MainTex("Albedo (RGB)", 2D) = "white" {}
         _BlackholePosition("Blackhole Position", Vector) = (0,0,0,0)
-        _DistortionStrength("Distortion Strength", Float) = 30.0
-        _MaxDistortionDistance("Max Distortion Distance", Float) = 5.0
+        _BlackholeStrength("Blackhole Distortion Strength", Float) = 30.0
     }
 
     SubShader {
@@ -21,8 +20,7 @@ Shader "Custom/BlackholeShader" {
 
         fixed4 _Color;
         float4 _BlackholePosition;
-        float _DistortionStrength;
-        float _MaxDistortionDistance;
+        float _BlackholeStrength;
 
         void vert(inout appdata_full v, out Input o) {
             UNITY_INITIALIZE_OUTPUT(Input, o);
@@ -38,10 +36,15 @@ Shader "Custom/BlackholeShader" {
             float3 direction = normalize(toBlackhole);
             float distortion;
             if (distance > 0) {
-                distortion = _DistortionStrength / (distance * distance);
-                //distortion = min(distortion, _MaxDistortionDistance); // Cap the distortion
+                distortion = _BlackholeStrength / (distance);
+                distortion = max(distortion, 0); // Avoid negative distortion
             } else {
-                distortion = _MaxDistortionDistance; // Avoid division by zero
+                distortion = 0; // Avoid division by zero
+            }
+
+            // If, as a result of distorsion, vertex position goes over the black hole position, then just set it to the black hole position
+            if (distortion > distance) {
+                distortion = distance;
             }
 
             // Apply the distortion to the vertex position in world space

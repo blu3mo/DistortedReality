@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: textured_0
-  m_Shader: {fileID: 4800000, guid: f8db1a7f7363344d98250a55fefd2e43, type: 3}
+  m_Shader: {fileID: 4800000, guid: 085afbdec9bc74181b576d06628f3cc7, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -61,26 +61,35 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _BlackholeStrength: 7
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _DistortionStrength: 500
+    - _DistortionStrength: 10
     - _DstBlend: 0
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
+    - _LineAttractionStrength: 20
     - _MaxDistortionDistance: 5
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _RotationStrength: 10
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _BlackholePosition: {r: -0.79, g: 11.88, b: 0, a: 0}
+    - _BlackholeEndPosition: {r: 1, g: 0, b: 0, a: 0}
+    - _BlackholePosition: {r: -3.63, g: 7.52, b: -7.38, a: 0}
+    - _BlackholeStartPosition: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _LineAttractionAxis: {r: 1, g: 0, b: 0, a: 1}
+    - _RotationAxis: {r: 0, g: 1, b: 0, a: 1}
+    - _SurfaceCenter: {r: 0, g: 0, b: 0, a: 0}
+    - _SurfaceNormal: {r: 0, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
