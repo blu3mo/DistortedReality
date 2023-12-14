@@ -4,6 +4,7 @@ Shader "Custom/Blackhole0D" {
         _MainTex("Albedo (RGB)", 2D) = "white" {}
         _BlackholePosition("Blackhole Position", Vector) = (0,0,0,0)
         _BlackholeStrength("Blackhole Distortion Strength", Float) = 30.0
+        // fix: should get blackhole positions array instead. make float array for x, y, z positions and make an
     }
 
     SubShader {
