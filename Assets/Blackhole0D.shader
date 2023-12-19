@@ -33,12 +33,43 @@ Shader "Custom/Blackhole0D" {
 
     // Transform vertex position to world space
     float4 originalWorldPos = mul(unity_ObjectToWorld, v.vertex);
-    float4 worldPos = mul(unity_ObjectToWorld, v.vertex);
+    float4 rotatedWorldPos = mul(unity_ObjectToWorld, v.vertex);
 
     for (int i = 0; i < 100; i++) {
         // Calculate the vector from the vertex to the black hole position in world space
         float3 _BlackholePosition = float3(_BlackholePositionX[i], _BlackholePositionY[i], _BlackholePositionZ[i]);
         float3 toBlackhole = _BlackholePosition - originalWorldPos.xyz;
+        float distance = length(toBlackhole);
+
+        // Rotation logic
+        float rotationAngleX = 0.5 * _BlackholeRotationX[i] / (distance * distance);
+        float rotationAngleY = 0.5 * _BlackholeRotationY[i] / (distance * distance);
+        float rotationAngleZ = 0.5 * _BlackholeRotationZ[i] / (distance * distance);
+
+        float4x4 rotationMatrixX = float4x4(1, 0, 0, 0,
+                                            0, cos(rotationAngleX), -sin(rotationAngleX), 0,
+                                            0, sin(rotationAngleX), cos(rotationAngleX), 0,
+                                            0, 0, 0, 1);
+
+        float4x4 rotationMatrixY = float4x4(cos(rotationAngleY), 0, sin(rotationAngleY), 0,
+                                            0, 1, 0, 0,
+                                            -sin(rotationAngleY), 0, cos(rotationAngleY), 0,
+                                            0, 0, 0, 1);
+
+        float4x4 rotationMatrixZ = float4x4(cos(rotationAngleZ), -sin(rotationAngleZ), 0, 0,
+                                            sin(rotationAngleZ), cos(rotationAngleZ), 0, 0,
+                                            0, 0, 1, 0,
+                                            0, 0, 0, 1);
+
+        rotatedWorldPos = mul(rotationMatrixX, rotatedWorldPos);
+        rotatedWorldPos = mul(rotationMatrixY, rotatedWorldPos);
+        rotatedWorldPos = mul(rotationMatrixZ, rotatedWorldPos);
+    }
+    float4 squeezedWorldPos = rotatedWorldPos;
+
+    for (int i = 0; i < 100; i++) {
+        float3 _BlackholePosition = float3(_BlackholePositionX[i], _BlackholePositionY[i], _BlackholePositionZ[i]);
+        float3 toBlackhole = _BlackholePosition - rotatedWorldPos.xyz;
         float distance = length(toBlackhole);
 
         // Normalize the direction and apply distortion based on inverse square of distance
@@ -57,39 +88,15 @@ Shader "Custom/Blackhole0D" {
         }
 
         // Apply the distortion to the vertex position in world space
-        worldPos.xyz += distortion * direction;
-
-        // Rotation logic
-        float rotationAngleX = _BlackholeRotationX[i] / (distance); // example formula
-        float rotationAngleY = _BlackholeRotationY[i] / (distance);
-        float rotationAngleZ = _BlackholeRotationZ[i] / (distance);
-
-        float4x4 rotationMatrixX = float4x4(1, 0, 0, 0,
-                                            0, cos(rotationAngleX), -sin(rotationAngleX), 0,
-                                            0, sin(rotationAngleX), cos(rotationAngleX), 0,
-                                            0, 0, 0, 1);
-
-        float4x4 rotationMatrixY = float4x4(cos(rotationAngleY), 0, sin(rotationAngleY), 0,
-                                            0, 1, 0, 0,
-                                            -sin(rotationAngleY), 0, cos(rotationAngleY), 0,
-                                            0, 0, 0, 1);
-
-        float4x4 rotationMatrixZ = float4x4(cos(rotationAngleZ), -sin(rotationAngleZ), 0, 0,
-                                            sin(rotationAngleZ), cos(rotationAngleZ), 0, 0,
-                                            0, 0, 1, 0,
-                                            0, 0, 0, 1);
-
-        worldPos = mul(rotationMatrixX, worldPos);
-        worldPos = mul(rotationMatrixY, worldPos);
-        worldPos = mul(rotationMatrixZ, worldPos);
+        squeezedWorldPos.xyz += distortion * direction;
     }
 
-    // Transform the vertex position back to object space
-    v.vertex = mul(unity_WorldToObject, worldPos);
-}
+        // Transform the vertex position back to object space
+        v.vertex = mul(unity_WorldToObject, squeezedWorldPos);
+    }
 
 
-        void surf(Input IN, inout SurfaceOutputStandard o) {
+    void surf(Input IN, inout SurfaceOutputStandard o) {
             fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
             o.Albedo = c.rgb;
             o.Alpha = c.a;
