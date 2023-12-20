@@ -76,35 +76,41 @@ public class BlackholesManager : MonoBehaviour
         }
     }
 
-    // private void MergeColliders()
-    // {
-    //     foreach(GameObject blackHole1 in blackHoles)
-    //     {
-    //         foreach(GameObject blackHole2 in blackHoles)
-    //         {
-    //             if(blackHole1 != blackHole2)
-    //             {
-    //                 if (Vector3.Distance(blackHole1.transform.position, blackHole2.transform.position) < .1)
-    //                 {
-    //                     if (blackHole1.transform.localScale.x > blackHole2.transform.localScale.x)
-    //                     {
-    //                         //destroy blackHole2
-    //                         Destroy(blackHole2);
-    //                         blackHoles.Remove(blackHole2);
-    //                         return;
-    //                     }
-    //                     else
-    //                     {
-    //                         //destroy blackHole1
-    //                         Destroy(blackHole1);
-    //                         blackHoles.Remove(blackHole1);
-    //                         return;
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
+    private void MergeColliders()
+    {
+        foreach(Blackhole blackHole1 in blackholes)
+        {
+            foreach(Blackhole blackHole2 in blackholes)
+            {
+                if(blackHole1 != blackHole2)
+                {
+                    if (Vector3.Distance(blackHole1.transform.position, blackHole2.transform.position) < .2)
+                    {
+                        if (blackHole1.transform.localScale.x > blackHole2.transform.localScale.x)
+                        {
+                            //add scale and rotation of blackhole 2 to blackhole 1.
+                            blackHole1.transform.localScale += blackHole2.transform.localScale;
+                            blackHole1.transform.rotation *= blackHole2.transform.rotation;
+                            //destroy blackHole2
+                            Destroy(blackHole2.gameObject);
+                            blackholes.Remove(blackHole2);
+                            return;
+                        }
+                        else
+                        {
+                            //add scale and rotation of blackhole 1 to blackhole 2.
+                            blackHole2.transform.localScale += blackHole1.transform.localScale;
+                            blackHole2.transform.rotation *= blackHole1.transform.rotation;
+                            //destroy blackHole1
+                            Destroy(blackHole1.gameObject);
+                            blackholes.Remove(blackHole1);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     public void MakeNewHole(float distBetweenGrabs, Vector3 midpoint)
     {
