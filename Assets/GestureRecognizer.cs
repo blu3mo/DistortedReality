@@ -128,11 +128,15 @@ public class GestureRecognizer : MonoBehaviour
                 //Debug.Log("grabTranslation: " + grabTranslation);
                 quaternion grabTurn = grabRotation * Quaternion.Inverse(_previousGrabRotation);
                 grabTurn = Quaternion.Slerp(grabTurn, Quaternion.identity, 0.9f);
-                Collider[] colliders = Physics.OverlapSphere(grabPosition, 0.1f);
+                Collider[] colliders = Physics.OverlapSphere(grabPosition, 0.2f);
                 foreach (Collider col in colliders)
                 {
-                    col.gameObject.transform.Translate(grabTranslation, Space.World);
-                    col.gameObject.transform.rotation = grabTurn * col.gameObject.transform.rotation;
+                    // if gameobject has Blackhole component
+                    if (col.gameObject.GetComponent<Blackhole>() != null)
+                    {
+                        col.gameObject.transform.Translate(grabTranslation, Space.World);
+                        col.gameObject.transform.rotation = grabTurn * col.gameObject.transform.rotation;
+                    }
                 }
             }
             _previousDoubleGrab = false;

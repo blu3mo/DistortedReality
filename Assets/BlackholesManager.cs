@@ -21,15 +21,15 @@ public class BlackholesManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameObject blackholeObject = Instantiate(blackHolePrefab_out, new Vector3(0, 0, 0), Quaternion.identity);
-        Blackhole blackhole1 = blackholeObject.AddComponent<Blackhole>();
-        blackholeObject.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-        blackholes.Add(blackhole1);
+        // GameObject blackholeObject = Instantiate(blackHolePrefab_out, new Vector3(0, 0, 0), Quaternion.identity);
+        // Blackhole blackhole1 = blackholeObject.AddComponent<Blackhole>();
+        // blackholeObject.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        // blackholes.Add(blackhole1);
 
-        GameObject blackholeObject2 = Instantiate(blackHolePrefab_out, new Vector3(5, 0, 0), Quaternion.identity);
-        Blackhole blackhole2 = blackholeObject2.AddComponent<Blackhole>();
-        blackholeObject2.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-        blackholes.Add(blackhole2);
+        // GameObject blackholeObject2 = Instantiate(blackHolePrefab_out, new Vector3(5, 0, 0), Quaternion.identity);
+        // Blackhole blackhole2 = blackholeObject2.AddComponent<Blackhole>();
+        // blackholeObject2.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        // blackholes.Add(blackhole2);
     }
 
     //GameObject currentlyEditingBlackhole;
@@ -43,7 +43,7 @@ public class BlackholesManager : MonoBehaviour
 
     private void UpdateShaders() {
 
-        int length = Math.Min(100, blackholes.Count);
+        int length = 100;//Math.Min(100, blackholes.Count);
         if (length == 0) {
             return;
         }
@@ -54,7 +54,7 @@ public class BlackholesManager : MonoBehaviour
         float[] blackholeRotationsY = new float[length];
         float[] blackholeRotationsZ = new float[length];
         float[] blackholeStrengths = new float[length];
-        for (int i = 0; i < length; i++)
+        for (int i = 0; i < Math.Min(100, blackholes.Count); i++)
         {
             Blackhole blackhole = blackholes[i];
             blackholePositionsX[i] = blackhole.position.x;
@@ -108,12 +108,14 @@ public class BlackholesManager : MonoBehaviour
 
     public void MakeNewHole(float distBetweenGrabs, Vector3 midpoint)
     {
-        GameObject newBlackHoleObject = Instantiate(blackHolePrefab_out, midpoint, UnityEngine.Quaternion.identity);
+        GameObject newBlackHoleObject = new GameObject();//Instantiate(blackHolePrefab_out, midpoint, UnityEngine.Quaternion.identity);
+        newBlackHoleObject.transform.position = midpoint;
+        newBlackHoleObject.transform.localScale = new Vector3(1, 1, 1);
+        newBlackHoleObject.transform.rotation = UnityEngine.Quaternion.identity;
         // get 3d angle and change to quaternion
 
         Blackhole blackhole = newBlackHoleObject.AddComponent<Blackhole>();
         blackholes.Add(blackhole);
-
     }
     public void TransformNewHole(Vector3 midpoint, float scale, Quaternion rotation)
     {

@@ -42,9 +42,9 @@ Shader "Custom/Blackhole0D" {
         float distance = length(toBlackhole);
 
         // Rotation logic
-        float rotationAngleX = 0.5 * _BlackholeRotationX[i] / (distance * distance);
-        float rotationAngleY = 0.5 * _BlackholeRotationY[i] / (distance * distance);
-        float rotationAngleZ = 0.5 * _BlackholeRotationZ[i] / (distance * distance);
+        float rotationAngleX = 0.4 * _BlackholeRotationX[i] / (distance);
+        float rotationAngleY = 0.4 * _BlackholeRotationY[i] / (distance);
+        float rotationAngleZ = 0.4 * _BlackholeRotationZ[i] / (distance);
 
         float4x4 rotationMatrixX = float4x4(1, 0, 0, 0,
                                             0, cos(rotationAngleX), -sin(rotationAngleX), 0,
